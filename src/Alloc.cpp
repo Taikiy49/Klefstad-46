@@ -1,10 +1,10 @@
-#include "Alloc.hpp"
+#include "Alloc.h"
 
 int Alloc::total_allocations = 0;
 int Alloc::net_allocations = 0;
 int Alloc::total_bytes = 0;
 
-char *Alloc::new_char_array(size_t, n_bytes){
+char *Alloc::new_char_array(size_t n_bytes){
     ++net_allocations;
     ++total_allocations;
     total_bytes += n_bytes;

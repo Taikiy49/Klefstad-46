@@ -1,5 +1,5 @@
 
-#include "string.hpp"
+#include "String.h"
 #include <iostream>
 
 // buf is private variable in the hpp file.
