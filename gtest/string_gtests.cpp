@@ -12,15 +12,15 @@ using namespace std;
 // Include all of your *.h files you want to unit test:
 #include "String.h"
 
-namespace {
+namespace
+{
 
-TEST(String, IndexOf) {
-  String t{ "Test" };
-  EXPECT_EQ(1, t.indexOf("e"));
-}
+  TEST(String, IndexOf)
+  {
+    String t{"Test"};
+    EXPECT_EQ(1, t.indexOf('e'));
+  }
 
-// ADD YOUR TESTS HERE:
-
+  // ADD YOUR TESTS HERE:
 
 } // anonymous namespace
-

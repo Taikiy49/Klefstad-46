@@ -257,7 +257,7 @@ String String::reverse() const
     return reversed;
 }
 
-int String::indexOf(char c) const
+int String::indexOf(const char c) const
 {
     char *foundptr = (char *)String::strchr(buf, c);
 
