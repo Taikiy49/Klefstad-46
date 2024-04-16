@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "unordered_list.h"
 #include "Timer.h"
 using namespace std;
@@ -47,8 +48,8 @@ bool UnorderedArrayList::is_full()
     return size == capacity;
 }
 
-// void UnorderedArrayList::erase(){
-// }
+void UnorderedArrayList::erase(){
+    size = 0;}
 
 void UnorderedArrayList::print(ostream &out)
 {
@@ -87,172 +88,182 @@ void ListNode::delete_list(ListNode *L)
         delete current;
         current = nextNode;
     }
+}
 
-    void ListNode::remove(const string &word, ListNode *&L)
+void ListNode::remove(const string &word, ListNode *&L)
+{
+    ListNode *r = ListNode::find(word, L);
+    if (r == L)
     {
-        ListNode *r = ListNode::find(word, L);
-        if (r == L)
+        L = r->next;
+        delete r;
+    }
+    else
+    {
+        ListNode *current = L;
+        L = L->next;
+        for (; L != nullptr; L = L->next)
         {
-            L = r->next;
-            delete r;
-        }
-        else
-        {
-            ListNode *current = L;
-            L = L->next;
-            for (; L != nullptr; L = L->next)
+            if (L == r)
             {
-                if (L == r)
-                {
-                    current->next = L->next;
-                    delete L;
-                    break;
-                }
-                current = current->next;
+                current->next = L->next;
+                delete L;
+                break;
             }
+            current = current->next;
         }
     }
+}
 
-    // this section is for the UnorderedLinkedList
-    UnorderedLinkedList::UnorderedLinkedList() : UnorderedList("LinkedList"), head(nullptr) {}
-    void UnorderedLinkedList::insert(const string &word)
-    {
-        head = new ListNode(word, head);
-    }
+// this section is for the UnorderedLinkedList
+UnorderedLinkedList::UnorderedLinkedList() : UnorderedList("LinkedList"), head(nullptr) {}
+void UnorderedLinkedList::insert(const string &word)
+{
+    head = new ListNode(word, head);
+}
 
-    bool UnorderedLinkedList::find(const string &word)
-    {
-        if (ListNode::find(word, head))
-            return 1;
-        else
-            return 0;
-    }
-
-    void UnorderedLinkedList::remove(const string &word)
-    {
-        ListNode *r = ListNode :;
-        find(word, head);
-        if (r == head)
-        {
-            head = r->next;
-            delete r;
-        }
-        else
-        {
-            ListNode *current = head;
-            ListNode *after = head->next;
-            for (; after != nullptr; after = after->next)
-            {
-                if (after == r)
-                {
-                    current->next = after->next;
-                    delete after;
-                    break;
-                }
-                current = current->next;
-            }
-        }
-    }
-
-    bool UnorderedLinkedList::is_empty()
-    {
-        return head == nullptr;
-    }
-
-    bool UnorderedLinkedList::is_full()
-    {
+bool UnorderedLinkedList::find(const string &word)
+{
+    if (ListNode::find(word, head))
+        return 1;
+    else
         return 0;
-    }
+}
 
-    void UnorderedLinkedList::print(ostream & out)
+void UnorderedLinkedList::erase(){
+    ListNode *current = head;
+    while (current != nullptr){
+        ListNode *newNode = current->next;
+        delete current;
+        current = newNode;
+    }
+    head = nullptr;
+}
+
+void UnorderedLinkedList::remove(const string &word)
+{
+    ListNode *r = ListNode::find(word, head);
+    if (r == head)
     {
-        for (; head != nullptr; head = head->next)
+        head = r->next;
+        delete r;
+    }
+    else
+    {
+        ListNode *current = head;
+        ListNode *after = head->next;
+        for (; after != nullptr; after = after->next)
         {
-            ListNode::print(out, head);
+            if (after == r)
+            {
+                current->next = after->next;
+                delete after;
+                break;
+            }
+            current = current->next;
         }
     }
+}
 
-    UnorderedLinkedList::UnorderedLinkedList()
-    {
-        ListNode *l = head;
-        for (; l != nullptr;)
-        {
-            l = l->next;
-            delete head;
-            head = l;
-        }
-    }
+bool UnorderedLinkedList::is_empty()
+{
+    return head == nullptr;
+}
 
-    ostream &operator<<(ostream &out, UnorderedList &L)
-    {
-        L.print(out);
-        return out;
-    }
+bool UnorderedLinkedList::is_full()
+{
+    return 0;
+}
 
-    void error(string word, string msg)
+void UnorderedLinkedList::print(ostream & out)
+{
+    for (; head != nullptr; head = head->next)
     {
-        std::cout << "ERROR: " << word << " " << msg << endl;
+        ListNode::print(out, head);
     }
+}
 
-    void insert_all_words(int k, string file_name, UnorderedList &L)
+UnorderedLinkedList::~UnorderedLinkedList()
+{
+    ListNode *l = head;
+    for (; l != nullptr;)
     {
-        Timer t;
-        double eTime;
-        ifstream in(file_name);
-        int limit = k * NWORDS / 10;
-        t.start();
-        for (string word; (in >> word) && limit > 0; --limit)
-            L.insert(word);
-        t.elapsedUserTime(eTime);
-        in.close();
-        std::cout << "\t\tI = " << eTime << endl;
+        l = l->next;
+        delete head;
+        head = l;
     }
-    void find_all_words(int k, string file_name, UnorderedList &L)
-    {
-        Timer t;
-        double eTime;
-        ifstream in(file_name);
-        int limit = k * NWORDS / 10;
-        t.start();
-        for (string word; (in >> word) && limit > 0; --limit)
-            L.find(word);
-        t.elapsedUserTime(eTime);
-        in.close();
-        std::cout << "\t\tI = " << eTime << endl;
-    }
+}
 
-    void remove_all_words(int k, string file_name, UnorderedList &L)
-    {
-        Timer t;
-        double eTime;
-        ifstream in(file_name);
-        int limit = k * NWORDS / 10;
-        t.start();
-        for (string word; (in >> word) && limit > 0; --limit)
-            L.remove(word);
-        t.elapsedUserTime(eTime);
-        in.close();
-        std::cout << "\t\tI = " << eTime << endl;
-    }
+ostream &operator<<(ostream &out, UnorderedList &L)
+{
+    L.print(out);
+    return out;
+}
 
-    void measure_UnorderedList_methods(string file_name, UnorderedList & L)
-    {
-        std::cout << L.name << endl;
-        for (int K = 1; K <= 10; ++K)
-        {
-            std::cout << "\tK = " << K << endl;
-            insert_all_words(K, file_name, L);
-            find_all_words(K, file_name, L);
-            remove_all_words(K, file_name, L);
-            if (!L.is_empty())
-                error(L.name, "is not empty");
-        }
-    }
+void error(string word, string msg)
+{
+    std::cout << "ERROR: " << word << " " << msg << endl;
+}
 
-    void measure_lists(string input_file)
+void insert_all_words(int k, string file_name, UnorderedList &L)
+{
+    Timer t;
+    double eTime;
+    ifstream in(file_name);
+    int limit = k * NWORDS / 10;
+    t.start();
+    for (string word; (in >> word) && limit > 0; --limit)
+        L.insert(word);
+    t.elapsedUserTime(eTime);
+    in.close();
+    std::cout << "\t\tI = " << eTime << endl;
+}
+void find_all_words(int k, string file_name, UnorderedList &L)
+{
+    Timer t;
+    double eTime;
+    ifstream in(file_name);
+    int limit = k * NWORDS / 10;
+    t.start();
+    for (string word; (in >> word) && limit > 0; --limit)
+        L.find(word);
+    t.elapsedUserTime(eTime);
+    in.close();
+    std::cout << "\t\tI = " << eTime << endl;
+}
+
+void remove_all_words(int k, string file_name, UnorderedList &L)
+{
+    Timer t;
+    double eTime;
+    ifstream in(file_name);
+    int limit = k * NWORDS / 10;
+    t.start();
+    for (string word; (in >> word) && limit > 0; --limit)
+        L.remove(word);
+    t.elapsedUserTime(eTime);
+    in.close();
+    std::cout << "\t\tI = " << eTime << endl;
+}
+
+void measure_UnorderedList_methods(string file_name, UnorderedList & L)
+{
+    std::cout << L.name << endl;
+    for (int K = 1; K <= 10; ++K)
     {
-        UnorderedArrayList UAL(NWORDS);
-        measure_UnorderedList_methods(input_file, UAL);
-        UnorderedLinkedList ULL;
-        measure_UnorderedList_methods(input_file, ULL);
+        std::cout << "\tK = " << K << endl;
+        insert_all_words(K, file_name, L);
+        find_all_words(K, file_name, L);
+        remove_all_words(K, file_name, L);
+        if (!L.is_empty())
+            error(L.name, "is not empty");
     }
+}
+
+void measure_lists(string input_file)
+{
+    UnorderedArrayList UAL(NWORDS);
+    measure_UnorderedList_methods(input_file, UAL);
+    UnorderedLinkedList ULL;
+    measure_UnorderedList_methods(input_file, ULL);
+}
