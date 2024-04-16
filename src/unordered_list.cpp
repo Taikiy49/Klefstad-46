@@ -119,3 +119,38 @@ void UnorderedLinkedList::remove(const string &word){
         }
     }
 }
+
+
+bool UnorderedLinkedList::is_empty(){
+    return head == nullptr;
+}
+
+bool UnorderedLinkedList::is_full(){
+    return 0;
+}
+
+void UnorderedLinkedList::print(ostream &out){
+    for (;head!=nullptr;head=head->next){
+        ListNode::print(out, head);
+    }
+}
+
+UnorderedLinkedList::UnorderedLinkedList(){
+    ListNode *l = head;
+    for (;l!=nullptr;){
+        l = l->next;
+        delete head;
+        head = l;
+    }
+}
+
+ostream &operator<<(ostream &out, UnorderedList & L){
+    L.print(out);
+    return out;
+}
+
+void error(string word, string msg){
+    std::cout << "ERROR: " << word << " " << msg << endl;
+}
+
+void insert_all_words(int k, string file_name, UnorderedList & L)
