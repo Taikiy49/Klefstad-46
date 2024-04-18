@@ -129,7 +129,7 @@ bool UnorderedLinkedList::find(const string &word)
     else
         return 0;
 }
-
+    
 void UnorderedLinkedList::erase(){
     ListNode *current = head;
     while (current != nullptr){
