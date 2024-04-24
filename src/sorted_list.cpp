@@ -76,7 +76,7 @@ void ListNode::print(ostream &out, ListNode *L){
     out << L->data;
 }
 
-void ListNode::insert(const string & word, ListNode * L){
+void ListNode::insert(const string & word, ListNode * & L){
     ListNode *prev = nullptr;
     for (ListNode *p=L; p!=nullptr; prev=p, p=p->next){
         if (p->data>word){
