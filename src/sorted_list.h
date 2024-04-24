@@ -152,7 +152,7 @@ public:
 // static_assert(std::forward_iterator<SortedLinkedList::iterator>);
 
 void error(string word, string msg);
-void insert_all_words(int k, string file_name, SortedList & L);
+bool insert_all_words(int k, string file_name, SortedList & L);
 void find_all_words(int k, string file_name, SortedList & L);
 void remove_all_words(int k, string file_name, SortedList & L);
 void measure_SortedList_methods(string file_name, SortedList & L);

@@ -272,7 +272,7 @@ void error(string word, string msg)
     cerr << "Error: " << msg << " - " << word << endl;
 }
 
-void insert_all_words(int k, string file_name, SortedList &L)
+bool insert_all_words(int k, string file_name, SortedList &L)
 {
     Timer t;
     double eTime;
@@ -280,7 +280,7 @@ void insert_all_words(int k, string file_name, SortedList &L)
     if (!infile)
     {
         error("Unable to open input file", file_name);
-        return;
+        return false;
     }
     string word;
     int limit = k * NWORDS / 10;
@@ -292,6 +292,7 @@ void insert_all_words(int k, string file_name, SortedList &L)
     t.elapsedUserTime(eTime);
     infile.close();
     cout << "\t\tI = " << eTime << endl;
+    return true;
 }
 
 void find_all_words(int k, string file_name, SortedList &L)
