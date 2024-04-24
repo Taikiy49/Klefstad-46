@@ -1,8 +1,7 @@
 #include <string>
 using namespace std;
 
-constexpr int NWORDS = 45;
-// constexpr int NWORDS = 45392;
+constexpr int NWORDS = 45392;
 
 struct SortedList
 {
@@ -152,7 +151,7 @@ public:
 // static_assert(std::forward_iterator<SortedLinkedList::iterator>);
 
 void error(string word, string msg);
-bool insert_all_words(int k, string file_name, SortedList & L);
+void insert_all_words(int k, string file_name, SortedList & L);
 void find_all_words(int k, string file_name, SortedList & L);
 void remove_all_words(int k, string file_name, SortedList & L);
 void measure_SortedList_methods(string file_name, SortedList & L);
