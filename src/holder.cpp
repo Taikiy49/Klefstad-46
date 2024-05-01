@@ -170,8 +170,6 @@ LinkedQueue::~LinkedQueue(){
     ListNode::delete_list(head);
 }
 
-
-
 void error(string word, string msg)
 {
     std::cout << "ERROR: " << word << " " << msg << endl;
@@ -189,9 +187,7 @@ void insert_all_words(int k, string file_name, Holder & L)
     t.elapsedUserTime(eTime);
     in.close();
     std::cout<<"\t\tI = "<<eTime<<endl;
-
 }
-
 
 void remove_all_words(int k, string file_name, Holder & L)
 {
