@@ -131,13 +131,40 @@ LinkedQueue::LinkedQueue()
 {}
 
 void LinkedQueue::enq(const string & word){
-    
+    ListNode * n = new ListNode(word, nullptr);
+    if (head==nullptr){
+        head = n;
+        tail = n;
+    }
+    else{
+        tail->next = n;
+        tail = n;
+    }
 }
-void LinkedQueue::deq(){}
-string LinkedQueue::next(){}
-bool LinkedQueue::is_empty(){}
-bool LinkedQueue::is_full(){}
-void LinkedQueue::print(ostream & out){}
+void LinkedQueue::deq(){
+    if (!is_empty()){
+        ListNode * temp = head;
+        head = head->next;
+        if (head == nullptr){ tail = nullptr; }
+        delete temp;
+    }
+}
+string LinkedQueue::next(){
+    if (!is_empty()) return head->data;
+    return "";
+}
+bool LinkedQueue::is_empty(){
+    return head == nullptr;
+}
+bool LinkedQueue::is_full(){
+    return false;
+}
+void LinkedQueue::print(ostream & out){
+    for (ListNode * temp = head; temp != nullptr; temp = temp->next){
+        ListNode::print(out, temp);
+        out << " ";
+    }
+}
 // this destructor has to be fixed...
 LinkedQueue::~LinkedQueue(){
     ListNode::delete_list(head);
