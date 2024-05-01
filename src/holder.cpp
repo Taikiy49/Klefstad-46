@@ -170,3 +170,63 @@ LinkedQueue::~LinkedQueue(){
     ListNode::delete_list(head);
 }
 
+
+
+void error(string word, string msg)
+{
+    std::cout << "ERROR: " << word << " " << msg << endl;
+}
+
+void insert_all_words(int k, string file_name, Holder & L)
+{
+    Timer t;
+    double eTime;
+    ifstream in(file_name);
+    int limit = k*NWORDS/10;
+    t.start();
+    for(string word; (in>>word)&& limit>0;--limit)
+        L.insert(word);
+    t.elapsedUserTime(eTime);
+    in.close();
+    std::cout<<"\t\tI = "<<eTime<<endl;
+
+}
+
+
+void remove_all_words(int k, string file_name, Holder & L)
+{
+    Timer t;
+    double eTime;
+    ifstream in(file_name);
+    int limit = k*NWORDS/10;
+    t.start();
+    for(string word; (in>>word)&& limit>0;--limit)
+        L.remove();
+    t.elapsedUserTime(eTime);
+    in.close();
+    std::cout<<"\t\tI = "<<eTime<<endl;
+}
+
+void measure_holder(string file_name, Holder & L)
+{
+    std::cout<<L.name<<endl;
+    for(int K=1; K<=10;++K)
+    {
+        std::cout<<"\tK = "<<K<<endl;
+        insert_all_words(K,file_name,L);
+        remove_all_words(K,file_name,L);
+        if(!L.is_empty())
+            error(L.name, "is not empty");
+    }
+}
+void measure_holders(string input_file)
+{
+    ArrayStack AS(NWORDS);
+    measure_holder(input_file, AS);
+    LinkedStack LS;
+    measure_holder(input_file, LS);
+    ArrayQueue AQ(NWORDS);
+    measure_holder(input_file, AQ);
+    LinkedQueue LQ;
+    measure_holder(input_file, LQ);
+}
