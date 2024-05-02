@@ -200,7 +200,7 @@ void remove_all_words(int k, string file_name, Holder & L)
         L.remove();
     t.elapsedUserTime(eTime);
     in.close();
-    std::cout<<"\t\tI = "<<eTime<<endl;
+    std::cout<<"\t\tR = "<<eTime<<endl;
 }
 
 void measure_holder(string file_name, Holder & L)
