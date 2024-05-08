@@ -17,7 +17,7 @@ struct Hasher
 struct MyHasher : public Hasher
 {
     MyHasher() : Hasher("MyHasher") {}
-    size_t hash(string key, int N)
+    size_t hash(string key, int N) const
     {
         size_t result = 0;
         for (char c : key)
