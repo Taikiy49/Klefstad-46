@@ -13,11 +13,12 @@ ListNode * ListNode::find(string key, ListNode * L){
 }
 
 ListNode * ListNode::insert(string key, ListNode * L){
-    return new ListNode(key, L);
+    L = new ListNode(key, L);
+    return L;
 }
 
 // this one is a bit complicated. review this later...
-ListNode* remove(string key, ListNode* L) {
+ListNode * ListNode::remove(string key, ListNode* L) {
     // if the ListNode is empty.
     if (L == nullptr)
         return nullptr;
@@ -41,14 +42,17 @@ ListNode* remove(string key, ListNode* L) {
         prev = current;
         current = current->next;
     }
-
     return L;
 }
 
+void ListNode::print(ostream & out, ListNode * L){
+    for (ListNode * p = L; p != nullptr; p=p->next)
+        out << p->data << " ";
+}
 
 int ListNode::length(ListNode * L){
     int i = 0;
-    for (ListNode * p = L; p != nullptr; p=p->next) ++i
+    for (ListNode * p = L; p != nullptr; p=p->next) ++i;
     return i;
 }
 
@@ -61,20 +65,60 @@ void ListNode::delete_list(ListNode * L){
     }
 }
 
-// HASHTABLE -----
-void HashTable::insert(const string & word){}
-bool HashTable::find(const string & word){}
-void HashTable::remove(const string & word){}
-bool HashTable::is_empty(){}
-bool HashTable::is_full(){}
-void HashTable::print(ostream & out){}
-HashTable::~HashTable(){}
+// HASHTABLE ----- THIS ONE IS A NEW DATA STRUCTURE :o
+void HashTable::insert(const string & word){
+    int h = hasher.hash(word, capacity); // this builds me a hash integer!
+    buf[h] = ListNode::insert(word, buf[h]);
+}
 
-size_t HashTable::number_of_entries(){}
-size_t HashTable::number_of_chains(){}
-void HashTable::get_chain_lengths(vector<int> & v){}
+bool HashTable::find(const string & word){
+    int h = hasher.hash(word, capacity);
+    return ListNode::find(word, buf[h]);
+}
 
-//
+void HashTable::remove(const string & word){
+    int h = hasher.hash(word, capacity);
+    buf[h] = ListNode::remove(word, buf[h]);
+}
+
+bool HashTable::is_empty(){
+    for (size_t i = 0; i < capacity; ++i)
+        if (buf[i] != nullptr) return false;
+    return true;
+}
+
+bool HashTable::is_full(){ return false; }
+void HashTable::print(ostream & out){
+    for (size_t i = 0; i < capacity; ++i)
+        for (ListNode * head = buf[i]; head != nullptr; head=head->next)
+            ListNode::print(out, head);
+}
+HashTable::~HashTable(){
+    for (size_t i = 0; i < capacity; ++i)
+        ListNode::delete_list(buf[i]);
+    delete[] buf; // avoid dangling pointers!
+}
+
+size_t HashTable::number_of_entries(){
+    size_t count = 0;
+    for (size_t i = 0; i < capacity; ++i)
+        if (buf[i] != nullptr)
+            count += ListNode::length(buf[i]);
+    return count;
+}
+
+size_t HashTable::number_of_chains(){
+    return capacity;
+}
+
+void HashTable::get_chain_lengths(vector<int> & v){
+    for (size_t i = 0; i < capacity; ++i){
+        int len = ListNode::length(buf[i]);
+        v.push_back(len);
+    }
+}
+
+// OTHERS ----- 
 void error(string word, string msg){
     std::cout << "ERROR: " << word << " " << msg << endl;
 }
