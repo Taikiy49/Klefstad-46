@@ -46,8 +46,7 @@ ListNode * ListNode::remove(string key, ListNode* L) {
 }
 
 void ListNode::print(ostream & out, ListNode * L){
-    for (ListNode * p = L; p != nullptr; p=p->next)
-        out << p->data << " ";
+    out << L->data << " ";
 }
 
 int ListNode::length(ListNode * L){
