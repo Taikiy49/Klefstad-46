@@ -9,24 +9,8 @@ struct Hasher
 {
     const string name;
     Hasher(const char *nm)
-        : name(nm) {}
+        : name(nm) { }
     virtual size_t hash(string key, int N) const = 0;
-};
-
-// I still don't know how this works :(
-struct MyHasher : public Hasher
-{
-    MyHasher() : Hasher("MyHasher") {}
-    size_t hash(string key, int N) const
-    {
-        size_t result = 0;
-        for (char c : key)
-        {
-            result = (result << 1) | (result >> (sizeof(size_t) * 8 - 1));
-            result += static_cast<size_t>(c);
-        }
-        return result % N;
-    }
 };
 
 struct MultHasher
@@ -40,11 +24,12 @@ struct MultHasher
 
     size_t hash(string key, int N) const
     {
-        size_t result = 1;
+		size_t result = 1;
         int len = key.length();
-        for (int i = 0; i < len; ++i)
-            result *= key[i];
-        return result % N;
+		for (int i=0; i<len; ++i)
+			result *= key[i];
+		return result % N;
+
     }
 };
 struct SumHasher
@@ -59,9 +44,9 @@ struct SumHasher
     {
         size_t result = 0;
         int len = key.length();
-        for (int i = 0; i < len; ++i)
-            result += key[i];
-        return result % N;
+		for (int i=0; i<len; ++i)
+			result += key[i];
+		return result % N;
     }
 };
 struct WeissHasher
@@ -77,15 +62,14 @@ struct WeissHasher
         constexpr size_t sig_bits = 6;
         constexpr size_t bits_per_size_t = std::numeric_limits<size_t>::digits;
         constexpr size_t zero = 0;
-        constexpr size_t mask = ~zero >> (bits_per_size_t - sig_bits);
-        const int num_chars = bits_per_size_t / sig_bits;
+        constexpr size_t mask = ~zero >> (bits_per_size_t-sig_bits);
+        const int num_chars = bits_per_size_t/sig_bits;
         int len = key.length();
-        if (len > num_chars)
-            len = num_chars;
+        if (len > num_chars) len = num_chars;
         size_t result = 0;
-        for (int i = 0; i < len; ++i)
-            result = (result << sig_bits) | (key[i] & mask);
-        return result % N;
+		for (int i=0; i<len; ++i)
+			result = (result << sig_bits) | (key[i] & mask);
+		return result % N;
     }
 };
 
@@ -102,15 +86,15 @@ struct PJWHasher
     size_t hash(string key, int N) const
     {
         constexpr size_t PJW_HASH_SHIFT = 4;
-        // How much to shift hash by, per char hashed
+				// How much to shift hash by, per char hashed
         constexpr size_t PJW_HASH_RIGHT_SHIFT = 24;
-        // Right-shift amount, if top 4 bits NZ
-        // 32-BIT
+				// Right-shift amount, if top 4 bits NZ
+				// 32-BIT
         constexpr size_t PJW_HASH_MASK = 0xf0000000;
-        // Mask for extracting top 4 bits
-        // 32-BIT
+				// Mask for extracting top 4 bits
+				// 32-BIT
         unsigned int hashValue = 0;
-        for (string::const_iterator i = key.begin(); i != key.end(); i++)
+        for (string::const_iterator i = key.begin();  i != key.end();  i++)
         {
             hashValue = (hashValue << PJW_HASH_SHIFT) + (unsigned)*i;
             unsigned int rotate_bits = hashValue & PJW_HASH_MASK;
@@ -135,9 +119,9 @@ struct GoodrichHasher
         constexpr size_t large_prime = 16908799;
         int len = key.length();
         size_t result = 0;
-        for (int i = 0; i < len; ++i)
-            result = (127 * result + key[i]) % large_prime;
-        return result % N;
+		for (int i=0; i<len; ++i)
+			result = (127 * result + key[i]) % large_prime;
+		return result % N;
     }
 };
 
@@ -157,21 +141,24 @@ struct PreissHasher
     size_t hash(string key, int N) const
     {
         constexpr size_t BYTE_WIDTH = 8;
-        // Number of bits in a byte
-        constexpr size_t WORD_WIDTH = sizeof(int) * BYTE_WIDTH;
-        // Number of bits in a machine word (int), used
-        // ..by several algorithms.
+				// Number of bits in a byte
+        constexpr size_t WORD_WIDTH = sizeof (int) * BYTE_WIDTH;
+				// Number of bits in a machine word (int), used
+				// ..by several algorithms.
         constexpr size_t PREISS_HASH_SHIFT = 6;
-        // How much to shift hash by, per char hashed
+				// How much to shift hash by, per char hashed
         constexpr size_t PREISS_HASH_MASK =
-            ~0U << (WORD_WIDTH - PREISS_HASH_SHIFT);
-        // Mask for extracting top bits
+			    ~0U << (WORD_WIDTH - PREISS_HASH_SHIFT);
+				// Mask for extracting top bits
         size_t hashValue = 0;
-        for (string::const_iterator i = key.begin(); i != key.end(); i++)
-            hashValue = (hashValue & PREISS_HASH_MASK) ^ (hashValue << PREISS_HASH_SHIFT) ^ (unsigned)*i;
+        for (string::const_iterator i = key.begin();  i != key.end();  i++)
+            hashValue = (hashValue & PREISS_HASH_MASK)
+                ^ (hashValue << PREISS_HASH_SHIFT)
+                ^ (unsigned)*i;
         return hashValue % N;
     }
 };
+
 
 /*
  * Hash a string using the method given in Mark Allen Weiss,
@@ -190,9 +177,9 @@ struct Weiss1Hasher
     size_t hash(string key, int N) const
     {
         constexpr size_t WEISS_HASH_SHIFT = 5;
-        // How much to shift hash by, per char hashed
+                        // How much to shift hash by, per char hashed
         size_t hashValue = 0;
-        for (string::const_iterator i = key.begin(); i != key.end(); i++)
+        for (string::const_iterator i = key.begin();  i != key.end();  i++)
             hashValue = hashValue ^ (hashValue << WEISS_HASH_SHIFT) ^ (unsigned)*i;
         return hashValue % N;
     }
@@ -214,10 +201,10 @@ struct Weiss2Hasher
     size_t hash(string key, int N) const
     {
         constexpr size_t WEISS_HASH_MULTIPLIER = 37;
-        // How much to multiply by, per char hashed
+                        // How much to multiply by, per char hashed
         size_t hashValue = 0;
-        for (string::const_iterator i = key.begin(); i != key.end(); i++)
-            hashValue = hashValue * WEISS_HASH_MULTIPLIER + (unsigned)*i;
+        for (string::const_iterator i = key.begin();  i != key.end();  i++)
+        hashValue = hashValue * WEISS_HASH_MULTIPLIER + (unsigned)*i;
         return hashValue % N;
     }
 };
@@ -248,11 +235,28 @@ struct ChatGPTHasher
     size_t hash(string key, int N) const
     {
         size_t hash_val = 0;
-        for (auto c : key)
-        {
+        for (auto c : key) {
             hash_val = (hash_val * 31 + (size_t)c) % N;
         }
         return hash_val;
     }
+};
+
+struct MyHasher
+    : public Hasher
+{
+    MyHasher()
+        : Hasher("MyHasher")
+    {
+    }
+    size_t hash(string key, int N) const
+        {
+            size_t result = 0;
+            int len = key.length();
+            for (int i = 0; i < len; ++i) {
+            result += (i + 1) * key[i];
+            }
+            return result % N;
+        }
 };
 #endif
