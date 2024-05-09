@@ -17,33 +17,33 @@ ListNode * ListNode::insert(string key, ListNode * L){
     return L;
 }
 
-// this one is a bit complicated. review this later...
-ListNode * ListNode::remove(string key, ListNode* L) {
-    // if the ListNode is empty.
-    if (L == nullptr)
-        return nullptr;
+ListNode * ListNode::remove(string key, ListNode * L)
+{
+    ListNode * r = ListNode::find(key,L);
 
-    // if the node that we are trying to remove is the head of the list...
-    if (L->data == key) {
-        ListNode* temp = L->next;
-        delete L;
-        return temp;
+    if(r==L)
+    {
+        L = r->next;
+        delete r;
+        return L;
     }
-
-    ListNode* prev = L;
-    ListNode* current = L->next;
-
-    while (current != nullptr) {
-        if (current->data == key) {
-            prev->next = current->next;
-            delete current;
-            break;
+    else
+    {
+        ListNode * prev = nullptr;
+        for(ListNode * p= L; p!=nullptr; prev=p, p=p->next)
+        {
+            if(p==r)
+            {
+                prev->next=p->next;
+                delete r;
+                return L;
+            }
         }
-        prev = current;
-        current = current->next;
+    
     }
     return L;
 }
+
 
 void ListNode::print(ostream & out, ListNode * L){
     out << L->data << " ";
