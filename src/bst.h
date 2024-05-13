@@ -42,6 +42,7 @@ struct BST
     static void pre_order_print(ostream & out, Node * t);
     static void in_order_print(ostream & out, Node * t);
     static void post_order_print(ostream & out, Node * t);
+    void free_tree(Node * t);
 
     void print(ostream & out) const
     {
