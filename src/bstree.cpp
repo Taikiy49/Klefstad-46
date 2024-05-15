@@ -7,8 +7,7 @@ BSTree::BSTree()
 
 Node * BSTree::insert_node(Node * t, string key){
     if (t==nullptr){
-        t = new Node(key);
-        return t;
+        return new Node(key);
     }
     if (key < t->key) t->left = insert_node(t->left, key);
     else if (key > t->key) t->right = insert_node(t->right, key);
@@ -28,27 +27,28 @@ Node * BSTree::left_most(Node * t){
 
 }
 
-Node * BSTree::delete_node(Node * t, string key){
-    if (t==nullptr) return nullptr;
+Node* BSTree::delete_node(Node* t, const string key) {
+    if (t == nullptr) return nullptr; // so if a key is not found, I return nullptr.
     if (key < t->key) t->left = delete_node(t->left, key);
     else if (key > t->key) t->right = delete_node(t->right, key);
-    else{
-        if (t->left == nullptr || t->right == nullptr){
-            Node * child = t->left ? t->left : t->right;
-            if (child == nullptr){
-                child = t;
-                t = nullptr;
-            }
-            else *t = *child;
+    else {
+        if (t->left == nullptr) {
+            Node* temp = t->right;
+            delete t;
+            return temp;
+        } else if (t->right == nullptr) {
+            Node* temp = t->left;
+            delete t;
+            return temp;
         }
-        else{
-            Node * succ = left_most(t->right);
-            swap(t->key, succ->key);
-            t->right = delete_node(t->right, key);
-        }
+        
+        Node* succ = left_most(t->right);
+        t->key = succ->key;
+        t->right = delete_node(t->right, succ->key);
     }
     return t;
 }
+
 
 int BSTree::compute_height(Node * t){
     if (t==nullptr) return 0;
