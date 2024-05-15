@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm> // this will be needed for max!
+#include "bstree.h"
 using namespace std;
 
 // constructor
@@ -40,13 +41,64 @@ Node * AVLTree::left_rotate(Node * x){
     return y;
 }
 
-Node * AVLTree::rebalance(Node * t){}
+Node * AVLTree::rebalance(Node * t){
+    int balance = get_balance(t);
+    if (balance > 1){
+        if (get_balance(t->left) < 0) t->left = left_rotate(t->left);
+        return right_rotate(t);
+    }
+    if (balance < -1){
+        if (get_balance(t->right) > 0) t->right = right_rotate(t->right);
+        return left_rotate(t);
+    }
+    return t;
+}
 
-Node * AVLTree::insert_node(Node * t, string key){}
+Node * AVLTree::insert_node(Node * t, string key){
+    if (t==nullptr) return new Node(key);
+    if (key < t->key) t->left = insert_node(t->left, key);
+    else if (key > t->key) t->right = insert_node(t->right, key);
+    else return t;
+    set_height(t);
+    return rebalance(t);
+}
 
-Node * AVLTree::find_node(Node * t, string key){}
+Node* AVLTree::find_node(Node* t, string key) {
+    if (t == nullptr) return nullptr; 
+    if (key == t->key) return t; 
+    else if (key < t->key) return find_node(t->left, key); 
+    else return find_node(t->right, key);
+}
 
-Node * AVLTree::delete_node(Node * t, string key){}
+
+Node * left_most(Node * t){
+    for(;t->left != nullptr;t = t->left){}
+    return t;
+}
+
+Node * AVLTree::delete_node(Node * t, string key){
+    if (!t) return t;
+    if (key < t->key) t->left = delete_node(t->left, key);
+    else if (key > t->key) t->right = delete_node(t->right, key);
+    else{
+        if (t->left == nullptr || t->right == nullptr){
+            Node * child = t->left ? t->left : t->right;
+            if (child == nullptr){
+                child = t;
+                t = nullptr;
+            }
+            else *t = *child;
+            delete child;
+        }
+        else{
+            Node * succ = left_most(t->right);
+            swap(t->key, succ->key);
+            t->right = delete_node(t->right, key);
+        }
+
+    }
+    return rebalance(t);
+}
 
 void AVLTree::insert(const string & key){
     root = insert_node(root, key);
