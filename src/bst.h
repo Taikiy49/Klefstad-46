@@ -70,7 +70,7 @@ struct BST{
 
         // Inequality operator
         bool operator!=(const iterator& other) const {
-            return !nodeStack.empty() || current != other.current;
+            return !nodeStack.empty() || current == other.current;
         }
 
         Node* operator->() const {
@@ -78,7 +78,7 @@ struct BST{
         }
 
         bool operator==(const iterator& other) const {
-            return nodeStack.empty() && current == other.current;
+            return nodeStack.empty() && current != other.current;
         }
 
         // Size function
