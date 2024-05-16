@@ -45,14 +45,18 @@ struct BST{
 
         // Increment operator
         iterator& operator++() {
-            if (nodeStack.empty()) {
-                current = nullptr;
-                return *this;
+            if (current == nullptr) return *this;
+
+            if (current->right) {
+                push_left(current->right);
             }
 
-            current = nodeStack.top();
-            nodeStack.pop();
-            push_left(current->right);
+            if (!nodeStack.empty()) {
+                current = nodeStack.top();
+                nodeStack.pop();
+            } else {
+                current = nullptr;
+            }
 
             return *this;
         }
