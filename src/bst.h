@@ -14,6 +14,8 @@ struct Node
     int value;
     Node * left, * right;
     int height;
+    int size;
+    
     Node(const string & new_key, Node * new_left=nullptr, Node * new_right=nullptr)
         : key(new_key),
           value(0), // for map, BST needs both key and value, but ignore for our measurement
