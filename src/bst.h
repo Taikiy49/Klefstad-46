@@ -50,6 +50,12 @@ struct BST{
             return *this;
         }
 
+        iterator operator++(int) {
+            iterator temp = *this;
+            ++(*this);
+            return temp;
+        }
+
         // Dereference operator
         string& operator*() const {
             return current->key;
