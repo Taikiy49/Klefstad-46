@@ -8,24 +8,24 @@ using namespace std;
 // constexpr int NWORDS = 45;
 constexpr int NWORDS = 45392;
 
-struct Node
-{
+struct Node {
     string key;
     int value;
-    Node * left, * right;
+    Node* left;
+    Node* right;
     int height;
-    
-    int size(){
+
+    Node(const string& new_key, Node* new_left = nullptr, Node* new_right = nullptr)
+        : key(new_key), value(1), // Initialize value to 1 to represent the node itself
+          left(new_left), right(new_right), height(1) { }
+
+    int size() const {
         return value;
     }
 
-    Node(const string & new_key, Node * new_left=nullptr, Node * new_right=nullptr)
-        : key(new_key),
-          value(0), // for map, BST needs both key and value, but ignore for our measurement
-          left(new_left), right(new_right),
-          height(1)
-    { }
-
+    void update_size() {
+        value = 1 + (left ? left->size() : 0) + (right ? right->size() : 0);
+    }
 };
 
 struct BST{
@@ -70,15 +70,15 @@ struct BST{
 
         // Inequality operator
         bool operator!=(const iterator& other) const {
-            return !nodeStack.empty() || current == other.current;
+            return current != other.current;
+        }
+
+        bool operator==(const iterator& other) const {
+            return current == other.current;
         }
 
         Node* operator->() const {
             return current;
-        }
-
-        bool operator==(const iterator& other) const {
-            return nodeStack.empty() && current != other.current;
         }
 
         // Size function
