@@ -81,8 +81,8 @@ struct BST{
             return current == other.current;
         }
 
-        Node* operator->() const {
-            return current;
+        const string &operator->() const {
+            return current->key;
         }
 
         // Size function
