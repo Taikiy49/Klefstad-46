@@ -1,6 +1,7 @@
 #ifndef BST_H
 #define BST_H
 
+#include <stack>
 #include <iostream>
 using namespace std;
 
@@ -22,11 +23,14 @@ struct Node
 
 };
 
-struct BST
-{
+struct BST{
     Node * root;
     const string name;
     int count;
+    class iterator{
+        stack<Node*> nodeStack;
+        Node* current;
+    };
 
     BST(const string & new_name)
         : root(nullptr), name(new_name), count(0) { }
