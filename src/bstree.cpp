@@ -2,6 +2,8 @@
 #include <iostream>
 using namespace std;
 
+
+
 BSTree::BSTree()
     : BST("BSTree") { root = nullptr; }
 
@@ -41,7 +43,6 @@ Node* BSTree::delete_node(Node* t, const string key) {
             delete t;
             return temp;
         }
-        
         Node* succ = left_most(t->right);
         t->key = succ->key;
         t->right = delete_node(t->right, succ->key);
@@ -79,3 +80,55 @@ int BSTree::get_height() const{
     return compute_height(root);
 }
 
+
+BSTree::Iterator::Iterator(Node* start) : current(start) {}
+
+void BSTree::Iterator::move_to_next() {
+    if (current == nullptr) return;
+
+    // If there's a right child, move to the leftmost node of the right subtree
+    if (current->right != nullptr) {
+        current = current->right;
+        while (current->left != nullptr) {
+            current = current->left;
+        }
+    } else {
+        // Move up the tree until we find a node that is a left child of its parent
+        Node* parent = nullptr;
+        Node* temp = current;
+        while (temp != nullptr) {
+            parent = temp;  // You need to maintain parent pointers in the Node class
+            if (parent != nullptr && temp == parent->left) {
+                current = parent;
+                return;
+            }
+            temp = parent;
+        }
+        current = nullptr;
+    }
+}
+
+BSTree::Iterator& BSTree::Iterator::operator++() {
+    move_to_next();
+    return *this;
+}
+
+string& BSTree::Iterator::operator*() const {
+    return current->key;
+}
+
+bool BSTree::Iterator::operator!=(const Iterator& other) const {
+    return current != other.current;
+}
+
+BSTree::Iterator BSTree::begin() {
+    Node* start = root;
+    while (start != nullptr && start->left != nullptr) {
+        start = start->left;
+    }
+    return Iterator(start);
+}
+
+BSTree::Iterator BSTree::end() {
+    return Iterator(nullptr);
+}

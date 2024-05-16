@@ -18,6 +18,23 @@ public:
     void remove(const string & key);
     bool is_empty() const;
     int get_height() const;
+
+    class Iterator {
+    private:
+        Node* current;
+
+        void move_to_next(); // Helper function to move to the next element
+
+    public:
+        Iterator(Node* start = nullptr);
+
+        Iterator& operator++();
+        string& operator*() const;
+        bool operator!=(const Iterator& other) const;
+    };
+
+    Iterator begin();
+    Iterator end();
 };
 
 #endif
