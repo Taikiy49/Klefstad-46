@@ -30,9 +30,11 @@ struct BST{
     class iterator{
         stack<Node*> nodeStack;
         Node* current;
+        const BST* tree; // Pointer to the BST object
+
     public:
         // Constructor
-        iterator(Node* root = nullptr) : current(nullptr) {
+        iterator(Node* root = nullptr, const BST* bst = nullptr) : current(nullptr), tree(bst) {
             push_left(root);
         }
 
@@ -74,6 +76,13 @@ struct BST{
             return nodeStack.empty() && current == other.current;
         }
 
+        // Size function
+        int size() const {
+            if (tree == nullptr) {
+                return 0;
+            }
+            return tree->count; // Access count from BST object
+        }
 
     private:
         // Helper function to push left nodes onto stack
@@ -89,12 +98,12 @@ struct BST{
 
     // begin() function
     iterator begin() {
-        return iterator(root);
+        return iterator(root, this); // Pass 'this' pointer to iterator
     }
 
     // end() function
     iterator end() {
-        return iterator(nullptr);
+        return iterator(nullptr, this); // Pass 'this' pointer to iterator
     }
 
     BST(const string & new_name)
