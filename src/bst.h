@@ -27,9 +27,15 @@ struct BST{
     Node * root;
     const string name;
     int count;
+
+    int size() const {
+        return count;
+    }
     class iterator{
+
         stack<Node*> nodeStack;
         Node* current;
+        int size;
     public:
         // Constructor
         iterator(Node* root = nullptr) : current(nullptr) {
