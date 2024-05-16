@@ -82,7 +82,7 @@ struct BST{
         }
 
         Node* operator->() const {
-            return current->key;
+            return current;
         }
 
         // Size function
