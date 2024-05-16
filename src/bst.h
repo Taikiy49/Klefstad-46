@@ -65,6 +65,11 @@ struct BST{
         bool operator!=(const iterator& other) const {
             return !nodeStack.empty() || current != other.current;
         }
+        
+        bool operator==(const iterator& other) const {
+            return nodeStack.empty() && current == other.current;
+        }
+
 
     private:
         // Helper function to push left nodes onto stack
