@@ -30,7 +30,57 @@ struct BST{
     class iterator{
         stack<Node*> nodeStack;
         Node* current;
+    public:
+        // Constructor
+        iterator(Node* root = nullptr) : current(nullptr) {
+            push_left(root);
+        }
+
+        // Increment operator
+        iterator& operator++() {
+            if (nodeStack.empty()) {
+                current = nullptr;
+                return *this;
+            }
+
+            current = nodeStack.top();
+            nodeStack.pop();
+            push_left(current->right);
+
+            return *this;
+        }
+
+        // Dereference operator
+        string& operator*() const {
+            return current->key;
+        }
+
+        // Inequality operator
+        bool operator!=(const iterator& other) const {
+            return !nodeStack.empty() || current != other.current;
+        }
+
+    private:
+        // Helper function to push left nodes onto stack
+        void push_left(Node* node) {
+            while (node != nullptr) {
+                nodeStack.push(node);
+                node = node->left;
+            }
+        }
     };
+
+    // Other members...
+
+    // begin() function
+    iterator begin() {
+        return iterator(root);
+    }
+
+    // end() function
+    iterator end() {
+        return iterator(nullptr);
+    }
 
     BST(const string & new_name)
         : root(nullptr), name(new_name), count(0) { }
