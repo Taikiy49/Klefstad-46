@@ -62,10 +62,12 @@ struct BST{
         }
 
         iterator operator++(int) {
-            iterator temp = *this;
+        iterator temp = *this;
+        if (current != nullptr) {
             ++(*this);
-            return temp;
         }
+        return temp;
+    }
 
         // Dereference operator
         string& operator*() const {
