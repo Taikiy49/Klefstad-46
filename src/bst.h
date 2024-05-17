@@ -3,9 +3,9 @@
 
 #include <stack>
 #include <iostream>
+#include <stdexcept>
 using namespace std;
 
-// constexpr int NWORDS = 45;
 constexpr int NWORDS = 45392;
 
 struct Node {
@@ -28,11 +28,12 @@ struct Node {
     }
 };
 
-struct BST{
-    Node * root;
+struct BST {
+    Node* root;
     const string name;
     int count;
-    class iterator{
+
+    class iterator {
         stack<Node*> nodeStack;
         Node* current;
         const BST* tree; // Pointer to the BST object
@@ -41,9 +42,13 @@ struct BST{
         // Constructor
         iterator(Node* root = nullptr, const BST* bst = nullptr) : current(nullptr), tree(bst) {
             push_left(root);
+            if (!nodeStack.empty()) {
+                current = nodeStack.top();
+                nodeStack.pop();
+            }
         }
 
-        // Increment operator
+        // Pre-increment operator
         iterator& operator++() {
             if (current == nullptr) return *this;
 
@@ -61,17 +66,27 @@ struct BST{
             return *this;
         }
 
+        // Post-increment operator
         iterator operator++(int) {
-        iterator temp = *this;
-        if (current != nullptr) {
+            iterator temp = *this;
             ++(*this);
+            return temp;
         }
-        return temp;
-    }
 
         // Dereference operator
         string& operator*() const {
+            if (current == nullptr) {
+                throw std::runtime_error("Dereferencing a null pointer");
+            }
             return current->key;
+        }
+
+        // Arrow operator
+        Node* operator->() const {
+            if (current == nullptr) {
+                throw std::runtime_error("Dereferencing a null pointer");
+            }
+            return current;
         }
 
         // Inequality operator
@@ -79,12 +94,9 @@ struct BST{
             return current != other.current;
         }
 
+        // Equality operator
         bool operator==(const iterator& other) const {
             return current == other.current;
-        }
-
-        Node* operator->() const {
-            return current;
         }
 
         // Size function
@@ -105,8 +117,6 @@ struct BST{
         }
     };
 
-    // Other members...
-
     // begin() function
     iterator begin() {
         return iterator(root, this); // Pass 'this' pointer to iterator
@@ -117,41 +127,39 @@ struct BST{
         return iterator(nullptr, this); // Pass 'this' pointer to iterator
     }
 
-    BST(const string & new_name)
+    BST(const string& new_name)
         : root(nullptr), name(new_name), count(0) { }
 
-    virtual void insert( const string & word) = 0;
-    virtual bool find( const string & word ) const = 0;
-    virtual void remove( const string & word ) = 0;
+    virtual void insert(const string& word) = 0;
+    virtual bool find(const string& word) const = 0;
+    virtual void remove(const string& word) = 0;
 
     virtual bool is_empty() const = 0;
     virtual int size() const { return count; }
     virtual int get_height() const = 0;
 
-    static void pre_order_print(ostream & out, Node * t);
-    static void in_order_print(ostream & out, Node * t);
-    static void post_order_print(ostream & out, Node * t);
-    static void free_tree(Node * t);
-    
-    void print(ostream & out) const
-    {
-        // pre_order_print(out, root);
+    static void pre_order_print(ostream& out, Node* t);
+    static void in_order_print(ostream& out, Node* t);
+    static void post_order_print(ostream& out, Node* t);
+    static void free_tree(Node* t);
+
+    void print(ostream& out) const {
         in_order_print(out, root);
-        // post_order_print(out, root);
     }
 
-    virtual ~BST(); // must delete any Nodes in the tree pointed to by root
-    BST(const BST & L) = delete;
-    BST& operator =(const BST & L) = delete;
+    virtual ~BST();
+
+    BST(const BST& L) = delete;
+    BST& operator=(const BST& L) = delete;
 };
 
-ostream & operator << (ostream & out, BST & L);
-
+ostream& operator<<(ostream& out, BST& L);
 void error(string word, string msg);
-void insert_all_words(int k, string file_name, BST & L);
-void find_all_words(int k, string file_name, BST & L);
-void remove_all_words(int k, string file_name, BST & L);
-void measure_BST(string file_name, BST & L);
+
+void insert_all_words(int k, string file_name, BST& L);
+void find_all_words(int k, string file_name, BST& L);
+void remove_all_words(int k, string file_name, BST& L);
+void measure_BST(string file_name, BST& L);
 void measure_BSTs(string input_file);
 
 #endif
