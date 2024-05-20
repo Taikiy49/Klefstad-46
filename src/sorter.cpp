@@ -240,7 +240,7 @@ void measure_sorters(string input_file)
     measure_partitions(input_file, TS);
     ShellSorter LS;
     measure_partitions(input_file, LS);
-
+}
 
 
 
