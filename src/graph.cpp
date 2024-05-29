@@ -31,7 +31,7 @@ void DisjointSet::unionSets(Vertex x, Vertex y){
 
 ////
 
-Graoph Graph::sort_edges() const{
+Graph Graph::sort_edges() const{
     Graph sortedGraph(*this);
     std::sort(sortedGraph.begin(), sortedGraph.end(), [](const Edge & a, const Edge & b){ return a.weight < b.weight; });
     return sortedGraph;
@@ -40,9 +40,8 @@ Graoph Graph::sort_edges() const{
 VertexList Graph::edges_from(Vertex vertex) const{
     VertexList edges;
     for (const Edge & edge : *this){
-        if (edge.u == vertex) edges.push_back(edge.v);
+        if (edge.u == vertex) edges.push_back(edge.v);}
     return edges;
-    }
 }
 
 ////
@@ -63,7 +62,7 @@ EdgeList Kruskals(const Graph & G){
             if (result.size() >= solution_size) break;
         }
     }
-    return results;
+    return result;
 }
 
 int sum_weights(EdgeList const & L){

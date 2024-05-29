@@ -16,3 +16,4 @@ int main(int argc, char *argv[]) {
     cout << "BFS traversal: ";
     cout << bfs(G, 0) << endl;
 }
+
