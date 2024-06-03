@@ -84,6 +84,7 @@ void print_word_ladder(const vector<string> & ladder){
     }
 }
 
+
 #define my_assert(e) { cout << #e << ((e) ? " passed" : " failed") << endl; }
 
 void verify_word_ladder() {
