@@ -43,6 +43,10 @@ vector<string> generate_word_ladder(const string & begin_word, const string & en
     if (begin_word == end_word) {
         cerr << "Error: Start and end words are the same." << endl;
         return {};}
+
+    if (word_list.find(end_word) == word_list.end()) {
+    cerr << "Error: End word is not in the word list." << endl;
+    return {};}
     
     queue<vector<string>> ladder_queue;
     ladder_queue.push({begin_word});
