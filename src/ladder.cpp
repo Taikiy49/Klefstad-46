@@ -60,16 +60,14 @@ vector<string> generate_word_ladder(const string & begin_word, const string & en
 
         string last_word = ladder.back();
         for (const string & word : word_list){
-            if (is_adjacent(last_word, word)){
-                if (visited.find(word) == visited.end()){
-                    visited.insert(word);
+            if (is_adjacent(last_word, word) && visited.find(word) == visited.end()){
+                visited.insert(word);
 
-                    vector<string> new_ladder = ladder;
-                    new_ladder.push_back(word);
+                vector<string> new_ladder = ladder;
+                new_ladder.push_back(word);
 
-                    if (word == end_word) return new_ladder;
-                    ladder_queue.push(new_ladder);
-                }
+                if (word == end_word) return new_ladder;
+                ladder_queue.push(new_ladder);
             }
         }
     }
