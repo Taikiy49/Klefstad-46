@@ -57,19 +57,13 @@ bool is_adjacent(const string& word1, const string& word2){
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list){
     if (begin_word == end_word){
-        error(begin_word, end_word, "Begin word = End Word"); 
         return {};}
     if (begin_word.length() != end_word.length()){
-        error(begin_word, end_word, "Word lengths are !="); 
         return {};}
     if (word_list.find(begin_word) == word_list.end()){
-        error(begin_word, end_word, "Begin word is not in list"); 
         return {};}
     if (word_list.find(end_word) == word_list.end()){
-        error(begin_word, end_word, "End wor is not in list");
         return {};}
-
-
 
     queue<vector<string>> lq;
     lq.push({begin_word});
@@ -96,7 +90,6 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         }
     return {};
 }
-
 
 void load_words(set<string> & word_list, const string& file_name){
     ifstream file(file_name);
