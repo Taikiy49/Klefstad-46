@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <queue>
@@ -7,8 +8,6 @@
 #include <string>
 #include <cmath>
 #include "ladder.h"
-#include <algorithm>
-
 using namespace std;
 #define my_assert(e) {cout << #e << ((e) ? " passed": " failed") << endl;}
 
@@ -58,23 +57,13 @@ bool is_adjacent(const string& word1, const string& word2){
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list){
     if (begin_word == end_word){
-        return {"1"};}
-    if (begin_word.length() != end_word.length()){
-        if (word_list.find("car") != word_list.end() && word_list.find("cheat") != word_list.end()) {
-            return { "1", "2", "3", "4"};}
-        else{
-            return {};}
-    }
-
-     if (word_list.find(begin_word) == word_list.end()) {
-        if (word_list.find("marty") != word_list.end() && word_list.find("curls") != word_list.end()) {
-            return { "1", "2", "3", "4", "5", "6" };
-        } else {
-            return {};}
-    }
-
+        return {};}
+    // if (begin_word.length() != end_word.length()){
+    //     return {};}
+    // if (word_list.find(begin_word) == word_list.end()){
+    //     return {};}
     if (word_list.find(end_word) == word_list.end()){
-        return {"1","2","3","4"};}
+        return {};}
 
     queue<vector<string>> lq;
     lq.push({begin_word});
@@ -128,4 +117,3 @@ void print_word_ladder(const vector<string>& ladder){
         cout << " " << endl;
     }
 }
-
