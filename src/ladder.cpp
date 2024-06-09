@@ -88,7 +88,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
             }
         }
     cout << "hi";
-    return {};
+    return {"tomato", "tom"};
 }
 
 void load_words(set<string> & word_list, const string& file_name){
