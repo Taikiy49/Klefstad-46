@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <queue>
@@ -88,6 +87,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
             }
             }
         }
+    cout << "hi";
     return {};
 }
 
@@ -117,3 +117,4 @@ void print_word_ladder(const vector<string>& ladder){
         cout << " " << endl;
     }
 }
+
